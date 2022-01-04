@@ -25,18 +25,12 @@ def connect_mqtt():
     return client
 
 def publish(client,msg):
-    msg_count = 0
-
-
-    #msg = f"counter: {msg_count}"
     result = client.publish(topic, msg)
-    # result: [0, 1]
     status = result[0]
     if status == 0:
         print(f"Send `{msg}` to topic `{topic}`")
     else:
         print(f"Failed to send message to topic {topic}")
-    msg_count += 1
 
 
 def toFoward():
@@ -55,6 +49,13 @@ def toRight():
     print("Para direita!")  
     publish(clientMQTT,"DIR") 
 
+def toSend():
+    print("Enviar um programa!")  
+    msg = eProgram.get()
+    print(msg)
+    publish(clientMQTT,msg) 
+    
+
 
 master = tk.Tk()
 
@@ -62,11 +63,17 @@ frm = ttk.Frame(master, padding=6)
 frm.grid() 
 
 tk.Label(frm, text="Controle URA").grid(row=0, columnspan=3) 
-tk.Button(frm, width=20, text='Frente', command=toFoward).grid(row=1, column=1, pady=4) 
-tk.Button(frm, width=20, text='Esquerda', command=toLeft).grid(row=2, column=0, pady=4) 
-tk.Button(frm, width=20, text='Direita', command=toRight).grid(row=2, column=2, pady=4) 
-tk.Button(frm, width=20, text='Trás', command=toBackward).grid(row=3, column=1, pady=4) 
+tk.Button(frm, width=15, text='Frente', command=toFoward).grid(row=1, column=1, pady=4) 
+tk.Button(frm, width=15, text='Esquerda', command=toLeft).grid(row=2, column=0, pady=4) 
+tk.Button(frm, width=15, text='Direita', command=toRight).grid(row=2, column=2, pady=4) 
+tk.Button(frm, width=15, text='Trás', command=toBackward).grid(row=3, column=1, pady=4) 
+tk.Button(frm, width=10, text='Enviar', command=toSend).grid(row=4, column=2, pady=4) 
 
+varProgram = tk.StringVar() 
+varProgram.set("")  
+
+eProgram = tk.Entry(frm, width=40,justify=tk.LEFT, textvariable=varProgram)  
+eProgram.grid(row=4, columnspan=2,pady=3)
 
 clientMQTT = connect_mqtt()
 clientMQTT.loop_start()
