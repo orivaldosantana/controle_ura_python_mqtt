@@ -54,10 +54,16 @@ def toRight():
     publish(clientMQTT,"DIR") 
 
 def toSend():
-    print("Enviar um programa!")  
+    print("Enviar códigos!")  
     msg = eProgram.get()
     print(msg)
     publish(clientMQTT,msg) 
+
+def toSendProgram():
+    print("Enviar um programa!")  
+    msg = eProgramaText.get("1.0", "end-1c")
+    print(msg)
+    #publish(clientMQTT,msg) 
     
 master = tk.Tk()
 master.title("Controle MQTT URA")
@@ -73,13 +79,21 @@ tk.Button(frm, width=15, text='Direita', command=toRight).grid(row=2, column=2, 
 tk.Button(frm, width=15, text='Trás', command=toBackward).grid(row=3, column=1, pady=4) 
 tk.Button(frm, width=10, text='Enviar', command=toSend).grid(row=4, column=2, pady=4) 
 
-varProgram = tk.StringVar() 
-varProgram.set("")  
+varCodes = tk.StringVar() 
+varCodes.set("")  
 
-eProgram = tk.Entry(frm, width=37,justify=tk.LEFT, textvariable=varProgram)  
+eProgram = tk.Entry(frm, width=37,justify=tk.LEFT, textvariable=varCodes)  
 eProgram.grid(row=4, columnspan=2,pady=4)
 
 clientMQTT = connect_mqtt()
 clientMQTT.loop_start()
+
+# Códigos para a caixa de texto 
+#varProgram = tk.StringVar() 
+#varProgram.set("")  
+
+eProgramaText =  tk.Text(frm, height=7)
+eProgramaText.grid(row=5,columnspan=3) 
+tk.Button(frm, width=40, text='Processar Programa e Enviar', command=toSendProgram).grid(row=12, column=1, pady=4) 
 
 master.mainloop()
