@@ -60,7 +60,8 @@ class NLPBasico:
   def criaBagOfWords(self, _features = 15):
     self.cv = CountVectorizer( max_features = _features )
     self.X = self.cv.fit_transform(self.corpus).toarray() 
-    print(self.X) 
+    print("BoW:\n", self.X) 
+    print("Características:", self.cv.get_feature_names_out() )
 
   # Extrai e organiza todos os comandos NLP em vetor 
   def criaCorpus(self, _dataSet):
@@ -70,3 +71,5 @@ class NLPBasico:
       texto = self.limpaSenteca( _dataSet['comando nlp'][i])
       self.corpus.append(texto)
     print(self.corpus) 
+
+  

@@ -23,4 +23,26 @@ NLPProgramacao.criaCorpus(dataset)
 
 NLPProgramacao.criaBagOfWords()
 
+""" Várias linhas para testes  
+ande para frente
+vá para frente
+siga em frente
+um passo a frente
+frente
+ande para trás
+vá para trás
+um passo para trás
+trás
+vire para esquerda
+esquerda
+vire para direita
+direita
+"""
+
 print( NLPProgramacao.encontraComando(1,"vá em frente") )
+
+
+import pickle
+
+pickle.dump(NLPProgramacao, open("NLPProgramacao.pickle", "wb"))
+

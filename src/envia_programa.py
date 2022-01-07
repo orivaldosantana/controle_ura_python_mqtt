@@ -12,6 +12,10 @@ port = 1883
 topic = "URA001/input"
 client_id = f'ura-mqtt-{random.randint(0, 1000)}'
 
+# Carrega o modelo NLP 
+import pickle
+NLPProgramacao = pickle.load(open("NLPProgramacao.pickle", "rb"))
+
 def connect_mqtt():
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
@@ -62,8 +66,16 @@ def toSend():
 def toSendProgram():
     print("Enviar um programa!")  
     msg = eProgramaText.get("1.0", "end-1c")
-    print(msg)
-    #publish(clientMQTT,msg) 
+    linhas = msg.splitlines()
+    #for l in linhas: 
+    #    print(l)
+    #    cmd = NLPProgramacao.encontraComando(1,l) 
+    #    print(cmd) 
+    comandos = [NLPProgramacao.encontraComando(1,l) for l in linhas] 
+    #TODO: preciso retirar os camandos desconecidos ... quando o usuário digitar um comando inválido 
+    comandos = ';'.join(comandos) 
+    print(comandos) 
+    publish(clientMQTT,comandos) 
     
 master = tk.Tk()
 master.title("Controle MQTT URA")
@@ -89,9 +101,6 @@ clientMQTT = connect_mqtt()
 clientMQTT.loop_start()
 
 # Códigos para a caixa de texto 
-#varProgram = tk.StringVar() 
-#varProgram.set("")  
-
 eProgramaText =  tk.Text(frm, height=7)
 eProgramaText.grid(row=5,columnspan=3) 
 tk.Button(frm, width=40, text='Processar Programa e Enviar', command=toSendProgram).grid(row=12, column=1, pady=4) 
