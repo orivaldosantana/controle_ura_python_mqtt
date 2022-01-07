@@ -27,28 +27,32 @@ class NLPBasico:
 
   # código simples para encontrar o melhor elemento de um vetor  
   def encontraMelhor(self, pIn):
-    bestMetric = 0
-    bestI = 0 
+    melhorMetrica = 0
+    melhorI = 0 
+    proporcaoMelhorCasamento = 0 
+    maximoCasamento = np.inner(pIn,pIn)
     # usar o tamanho a partir do X 
     for i in range(len(self.X)):
       pData = np.array(self.X[i])
-      metric = np.inner(pIn,pData)
-      if metric > bestMetric:
-        bestMetric = metric
-        bestI = i 
-    return [bestMetric,bestI] 
+      metrica = np.inner(pIn,pData)
+      if metrica > melhorMetrica:
+        melhorMetrica = metrica
+        melhorI = i 
+        proporcaoMelhorCasamento = metrica / maximoCasamento 
+    return [melhorMetrica,melhorI,proporcaoMelhorCasamento]  
   
   # limiarConf, valor mínimo necessário para considerar que a pergunta é equivalente 
   def encontraComando(self, limiar_conf, sentenca):
     # Limpa a sentença / pergunta 
     sent =  self.limpaSenteca(sentenca)
     # gera a reprsentação vetorial para a sentença 
-    sent_bag = self.cv.transform([sent]).toarray()
+    sentBoW = self.cv.transform([sent]).toarray()
     # encontra a melhor representação na base de dados 
-    r = self.encontraMelhor(np.array(sent_bag[0]), self.X )
+    r = self.encontraMelhor(np.array(sentBoW[0]))
     # devolve se contém algum grau de semelhança 
-    if (r[0] > limiar_conf ):
-      return r[1]
+    if (r[0] >= limiar_conf ):
+      print("Casamento: ",r[2]*100,"%") 
+      return self.Y[r[1]]
     else: 
       return -1  
 

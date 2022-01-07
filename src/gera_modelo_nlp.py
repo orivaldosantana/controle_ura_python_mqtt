@@ -22,3 +22,5 @@ NLPProgramacao = NLPBasico(ps,palavrasVaziasPT)
 NLPProgramacao.criaCorpus(dataset) 
 
 NLPProgramacao.criaBagOfWords()
+
+print( NLPProgramacao.encontraComando(1,"vá em frente") )
