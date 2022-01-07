@@ -1,11 +1,19 @@
 import re
 import numpy as np
-
+from sklearn.feature_extraction.text import CountVectorizer 
 
 class NLPBasico:
   """ Classe com recursos básicos NLP """
 
-  def limpaSenteca(self, inText, porter, stopwords): 
+  def __init__(self, _porter, _palavrasVazias ):
+    self.porter = _porter 
+    self.palavrasVazias = _palavrasVazias 
+    self.corpus = [] 
+    self.X = [] 
+    self.Y = [] 
+    self.cv = -1  
+
+  def limpaSenteca(self, inText): 
     # deixa passar apenas letras e letras com acentuação 
     text = re.sub('[^a-zA-Záàâãéèêíïóôõöúçñ]', ' ', inText)
     # torna todas as letras minúsculas 
@@ -13,17 +21,17 @@ class NLPBasico:
     # divide o texto em palavras gerando um vetor de palavras 
     text = text.split()
     # filtra as palavras vazias e aplica 'porter stemmer' 
-    text = [porter.stem(word) for word in text if not word in set(stopwords)]
+    text = [self.porter.stem(word) for word in text if not word in set(self.palavrasVazias)]
     text = ' '.join(text)
     return text 
 
   # código simples para encontrar o melhor elemento de um vetor  
-  def encontraMelhor(self, pIn,X):
+  def encontraMelhor(self, pIn):
     bestMetric = 0
     bestI = 0 
     # usar o tamanho a partir do X 
-    for i in range(98):
-      pData = np.array(X[i])
+    for i in range(len(self.X)):
+      pData = np.array(self.X[i])
       metric = np.inner(pIn,pData)
       if metric > bestMetric:
         bestMetric = metric
@@ -31,15 +39,30 @@ class NLPBasico:
     return [bestMetric,bestI] 
   
   # limiarConf, valor mínimo necessário para considerar que a pergunta é equivalente 
-  def encontraComando(self, limiar_conf,sentenca,ps,X, palavras_vazias, dataset, cv):
+  def encontraComando(self, limiar_conf, sentenca):
     # Limpa a sentença / pergunta 
-    sent =  self.limpaSenteca(sentenca, ps, palavras_vazias)
+    sent =  self.limpaSenteca(sentenca)
     # gera a reprsentação vetorial para a sentença 
-    sent_bag = cv.transform([sent]).toarray()
+    sent_bag = self.cv.transform([sent]).toarray()
     # encontra a melhor representação na base de dados 
-    r = self.encontraMelhor(np.array(sent_bag[0]), X )
+    r = self.encontraMelhor(np.array(sent_bag[0]), self.X )
     # devolve se contém algum grau de semelhança 
     if (r[0] > limiar_conf ):
-      return dataset['PERGUNTAS'][r[1]]
+      return r[1]
     else: 
-      return 'Pergunta desconhecida.' 
+      return -1  
+
+  # Bag of Words 
+  def criaBagOfWords(self, _features = 15):
+    self.cv = CountVectorizer( max_features = _features )
+    self.X = self.cv.fit_transform(self.corpus).toarray() 
+    print(self.X) 
+
+  # Extrai e organiza todos os comandos NLP em vetor 
+  def criaCorpus(self, _dataSet):
+    self.Y = _dataSet.iloc[:,1].values  
+    print(self.Y) 
+    for i in range(0,len(_dataSet['comando nlp'])): 
+      texto = self.limpaSenteca( _dataSet['comando nlp'][i])
+      self.corpus.append(texto)
+    print(self.corpus) 
