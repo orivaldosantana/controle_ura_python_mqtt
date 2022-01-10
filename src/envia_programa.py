@@ -91,10 +91,8 @@ tk.Button(frm, width=15, text='Direita', command=toRight).grid(row=2, column=2, 
 tk.Button(frm, width=15, text='Trás', command=toBackward).grid(row=3, column=1, pady=4) 
 tk.Button(frm, width=10, text='Enviar', command=toSend).grid(row=4, column=2, pady=4) 
 
-varCodes = tk.StringVar() 
-varCodes.set("")  
 
-eProgram = tk.Entry(frm, width=37,justify=tk.LEFT, textvariable=varCodes)  
+eProgram = tk.Entry(frm, width=37,justify=tk.LEFT)  
 eProgram.grid(row=4, columnspan=2,pady=4)
 
 clientMQTT = connect_mqtt()
