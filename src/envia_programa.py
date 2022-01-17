@@ -12,6 +12,9 @@ port = 1883
 topic = "URA001/input"
 client_id = f'ura-mqtt-{random.randint(0, 1000)}'
 
+# Pós processamento dos textos 
+import re
+
 # Carrega o modelo NLP 
 import pickle
 NLPProgramacao = pickle.load(open("NLPProgramacao.pickle", "rb"))
@@ -67,11 +70,18 @@ def toSendProgram():
     print("Enviar um programa!")  
     msg = eProgramaText.get("1.0", "end-1c")
     linhas = msg.splitlines()
-    #for l in linhas: 
-    #    print(l)
-    #    cmd = NLPProgramacao.encontraComando(1,l) 
-    #    print(cmd) 
-    comandos = [NLPProgramacao.encontraComando(1,l) for l in linhas] 
+    comandos = []
+    for l in linhas: 
+        #print(l)
+        cmd = NLPProgramacao.encontraComando(1,l) 
+        #print(cmd) 
+        if cmd == 'FTT' or cmd == 'TRT' or cmd == 'DRT' or cmd == 'EST':
+            print(l)
+            numeros = re.findall("\d+", l)
+            parametro = numeros[0]
+            cmd = cmd +' '+ parametro 
+        comandos.append(cmd) 
+    #comandos = [NLPProgramacao.encontraComando(1,l) for l in linhas] 
     #TODO: preciso retirar os camandos desconecidos ... quando o usuário digitar um comando inválido 
     comandos = ';'.join(comandos) 
     print(comandos) 

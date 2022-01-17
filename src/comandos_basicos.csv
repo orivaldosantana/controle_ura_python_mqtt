@@ -2,13 +2,23 @@ comando nlp, codigo
 ande para frente,FRT
 vá para frente,FRT
 siga em frente,FRT
+frente por 1000 milisegundos,FTT
+vá para frente durante 4000 milisegundos,FTT
 um passo a frente,FRT
+avante,FRT
+continue,FRT
 frente,FRT
 ande para trás,TRS
 vá para trás,TRS
 um passo para trás,TRS
 trás,TRS
+trás por 1000 milisegundos,TRT
+vá para trás durante 4000 milisegundos,TRT
 vire para esquerda,ESQ
 esquerda,ESQ
+esquerda por 1000 milisegundos,EST
+vá para esquerda durante 4000 milisegundos,EST
 vire para direita,DIR
 direita,DIR
+direita por 1000 milisegundos,DRT
+vá para direita durante 4000 milisegundos,DRT

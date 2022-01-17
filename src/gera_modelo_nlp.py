@@ -4,7 +4,7 @@ import pandas as pd
 from basico_nlp import NLPBasico 
 
 import nltk
-#nltk.download('stopwords')
+nltk.download('stopwords')
 from nltk.corpus import stopwords
 # Escolher um algoritmo mais sofisticado de extração da palavra equivalente (stemmer) 
 from nltk.stem.porter import PorterStemmer  
@@ -39,7 +39,7 @@ vire para direita
 direita
 """
 
-print( NLPProgramacao.encontraComando(1,"vá em frente") )
+print( NLPProgramacao.encontraComando(1,"frente por 400 milisegundos") )
 
 
 import pickle
