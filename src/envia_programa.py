@@ -7,9 +7,9 @@ import random
 from paho.mqtt import client as mqtt_client
 
 # Variáveis para MQTT 
-broker = 'broker.emqx.io'
+broker = '157.230.89.7'
 port = 1883
-topic = "URA001/input"
+topic = "URA002/input"
 client_id = f'ura-mqtt-{random.randint(0, 1000)}'
 
 # Pós processamento dos textos 
@@ -84,8 +84,8 @@ def toSendProgram():
     #comandos = [NLPProgramacao.encontraComando(1,l) for l in linhas] 
     #TODO: preciso retirar os camandos desconecidos ... quando o usuário digitar um comando inválido 
     comandos = ';'.join(comandos) 
-    print(comandos) 
-    publish(clientMQTT,comandos) 
+    print(f"PRG;{comandos}") 
+    publish(clientMQTT,f"PRG;{comandos}") 
     
 master = tk.Tk()
 master.title("Controle MQTT URA")
