@@ -7,9 +7,15 @@ import random
 from paho.mqtt import client as mqtt_client
 
 # Variáveis para MQTT 
-broker = '157.230.89.7'
-port = 1883
-topic = "URA002/input"
+
+import json 
+conf_file = open('conf.json') 
+conf = json.load(conf_file) 
+conf_file.close() 
+
+broker = conf["mqtt_server"]
+port = conf["server_port"] 
+topic = "URA004/input"
 client_id = f'ura-mqtt-{random.randint(0, 1000)}'
 
 # Pós processamento dos textos 
@@ -70,7 +76,7 @@ def toSendProgram():
     print("Enviar um programa!")  
     msg = eProgramaText.get("1.0", "end-1c")
     linhas = msg.splitlines()
-    comandos = []
+    comandos = ['PRG']
     for l in linhas: 
         #print(l)
         cmd = NLPProgramacao.encontraComando(1,l) 
@@ -114,3 +120,15 @@ eProgramaText.grid(row=5,columnspan=3)
 tk.Button(frm, width=40, text='Processar Programa e Enviar', command=toSendProgram).grid(row=12, column=1, pady=4) 
 
 master.mainloop()
+
+
+""" 
+frente por 1270 milisegundos
+direita por 260 milisegundos
+frente por 1270 milisegundos
+direita por 260 milisegundos
+frente por 1270 milisegundos
+direita por 260 milisegundos
+frente por 1270 milisegundos
+direita por 260 milisegundos
+ """
